@@ -1,4 +1,3 @@
-# Environment secrets - NEVER upload this
 .env
 
 # Python cache files
