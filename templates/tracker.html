@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        /* The specific vibrant blue from your dashboard screenshot */
+        --bg-color: #3498db; 
+        --primary-button: #2980b9;
+        --card-bg: #ffffff;
+        --text-main: #333333;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--bg-color);
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--text-main);
+    }
+
+    .container {
+        width: 100%;
+        max-width: 400px;
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    h2 {
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: var(--text-main);
+        font-size: 1.6rem;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 15px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+        border: 1px solid #dcdde1;
+        background: #f8f9fa;
+        font-family: 'Poppins', sans-serif;
+        box-sizing: border-box;
+        outline: none;
+        font-size: 0.9rem;
+    }
+
+    input:focus {
+        border-color: var(--bg-color);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: var(--bg-color);
+        border: none;
+        border-radius: 6px;
+        color: white;
+        font-weight: 500;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background 0.2s;
+    }
+
+    button:hover {
+        background-color: var(--primary-button);
+    }
+
+    .result {
+        margin-top: 25px;
+        text-align: left;
+        background: #fdfdfd;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .result p {
+        margin: 10px 0;
+        font-size: 0.9rem;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #f1f1f1;
+        padding-bottom: 5px;
+    }
+
+    .result strong {
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+
+    /* PROGRESS STEPS */
+    .progress {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 6px;
+    }
+
+    .step {
+        flex: 1;
+        text-align: center;
+        font-size: 0.75rem;
+        padding: 8px 0;
+        background: #ececec;
+        border-radius: 4px;
+        color: #a0a0a0;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .step.active {
+        background-color: #2ecc71;
+        color: white;
+    }
+
+    .error {
+        color: #e74c3c;
+        background: #fdedec;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+        border: 1px solid #fadbd8;
+    }
+
+    .logout-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #95a5a6;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    .logout-link:hover {
+        color: var(--bg-color);
+        text-decoration: underline;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Case Tracker</h2>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="GET" action="/view_case_user">
+        <input type="text" name="ref_id" placeholder="Reference ID" required>
+        <button type="submit">Track by ID</button>
+    </form>
+
+    <form method="GET" action="/view_case_user">
+        <input type="text" name="name" placeholder="Search by Name" required>
+        <button type="submit">Track by Name</button>
+    </form>
+
+    {% if case %}
+    <div class="result">
+        <p><strong>Name</strong> <span>{{ case.name }}</span></p>
+        <p><strong>Crime</strong> <span>{{ case.crime_type }}</span></p>
+        <p><strong>Status</strong> <span>{{ case.status }}</span></p>
+
+        <div class="progress">
+            <div class="step {% if case.status == 'Pending' %}active{% endif %}">Pending</div>
+            <div class="step {% if case.status == 'In Progress' %}active{% endif %}">In Progress</div>
+            <div class="step {% if case.status == 'Closed' %}active{% endif %}">Closed</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <a href="/logout" class="logout-link">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

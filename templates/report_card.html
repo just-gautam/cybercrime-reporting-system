@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Receipt | Cybercrime Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --success-bg: #f6fef9;
+            --success-border: #6ce9a6;
+            --text-main: #1d2939;
+            --text-sub: #667085;
+            --border: #eaecf0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfcfd;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .receipt-card {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .receipt-card::before {
+            content: "OFFICIAL RECEIPT";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 60px;
+            font-weight: 900;
+            color: rgba(0,0,0,0.02);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .status-banner {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .ref-id {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #027a48;
+            margin: 8px 0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .data-item {
+            border-bottom: 1px solid #f2f4f7;
+            padding-bottom: 12px;
+        }
+
+        .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .value {
+            font-size: 15px;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .description-box {
+            grid-column: span 2; 
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #344054;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 11px;
+            color: #98a2b3;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+            line-height: 1.6;
+            width: 100%;
+        }
+
+        /* UPDATED SECTION START */
+        .action-btns {
+            display: flex;
+            flex-direction: row; /* Changed from column to row */
+            gap: 15px;
+            margin-top: 50px;
+            flex-wrap: wrap; /* Ensures buttons stack if screen is too small */
+        }
+
+        .btn {
+            flex: 1; /* Makes buttons equal width */
+            min-width: 160px;
+            padding: 16px; 
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            text-align: center;
+        }
+        /* UPDATED SECTION END */
+
+        .btn-secondary { background: #f2f4f7; color: #344054; }
+        .btn-primary { background: var(--primary); color: white; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .receipt-card { box-shadow: none; border: none; width: 100%; }
+            .action-btns { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="receipt-card">
+        <div class="header">
+            <h1>Cybercrime Reporting System</h1>
+            <p style="margin: 8px 0 0 0; color: var(--text-sub); font-size: 14px;">Official Acknowledgement of Complaint</p>
+        </div>
+
+        <div class="status-banner">
+            <div class="label" style="color: #027a48;">Complaint Registered Successfully</div>
+            <div class="ref-id">{{ case.reference_id }}</div>
+            <div style="font-size: 12px; color: #054f31;">Please quote this Reference ID for all future inquiries.</div>
+        </div>
+
+        <div class="details-grid">
+            <div class="data-item">
+                <div class="label">Complainant Name</div>
+                <div class="value">{{ case.name }}</div>
+            </div>
+            <div class="data-item">
+                <div class="label">Date of Filing</div>
+                <div class="value">{{ case.date }}</div>
+            </div>
+            <div class="data-item">
+                <div class="label">Email Address</div>
+                <div class="value">{{ case.email }}</div>
+            </div>
+            <div class="data-item">
+                <div class="label">Mobile Number</div>
+                <div class="value">{{ case.mobile }}</div>
+            </div>
+            <div class="data-item" style="grid-column: span 2;">
+                <div class="label">Category of Crime</div>
+                <div class="value" style="color: var(--primary);">{{ case.crime_type }}</div>
+            </div>
+            <div class="data-item" style="grid-column: span 2;">
+                <div class="label">Full Address</div>
+                <div class="value">{{ case.address }}</div>
+            </div>
+            
+            <div class="description-box">
+                <div class="label" style="margin-bottom: 8px;">Incident Description</div>
+                {{ case.description }}
+            </div>
+
+            <div class="description-box" style="border-left: 4px solid var(--primary); background: #f0f7ff;">
+                <div class="label" style="margin-bottom: 12px; color: var(--primary);">Evidence / Supporting Information</div>
+                <div style="font-family: monospace; font-size: 13px; line-height: 1.8;">
+                    {% if case.evidence %}
+                        {% set evidence_parts = case.evidence.split('|') %}
+                        {% for part in evidence_parts %}
+                            <div style="padding: 4px 0; border-bottom: 1px solid rgba(26, 115, 232, 0.1);">
+                                <strong>{{ part.split(':')[0] }}:</strong> {{ part.split(':')[1:] | join(':') }}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        No evidence provided.
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="action-btns">
+            <button onclick="window.print()" class="btn btn-primary">Print / Save as PDF</button>
+            <a href="/user" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+
+        <div class="footer-note">
+            This document serves as an official acknowledgement of your complaint.<br>
+            Please store this record safely. Our cybercrime investigation unit will review the details within 24-48 business hours.<br>
+            <strong>© 2026 Cybercrime Management System - Digital Integrity Division</strong>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Environment secrets - NEVER upload this
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+tempCodeRunnerFile.py
+
+# Uploaded user files (personal data)
+static/uploads/
+
+# Virtual environment
+venv/
+env/

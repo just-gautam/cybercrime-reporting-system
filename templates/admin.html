@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Case Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --bg: #f4f7f9;
+            --text-main: #1d2939;
+            --text-sub: #667085;
+            --border: #eaecf0;
+            --danger: #d93025;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px;
+            color: var(--text-main);
+        }
+
+        .admin-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .header-bar {
+            padding: 24px 32px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto; /* Changed from fixed to handle content better */
+        }
+
+        th {
+            background: #f9fafb;
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-sub);
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background-color: #fcfdfe;
+        }
+
+        .ref-id {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .crime-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #eef4ff;
+            color: var(--primary);
+            border: 1px solid #d1e0ff;
+        }
+
+        /* Status Select Styling */
+        .status-select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-family: 'Inter';
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 130px; /* Fixed width prevents shifting */
+            outline: none;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 24px;
+            color: var(--danger);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--danger);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #fff5f5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--text-sub);
+        }
+        
+        .action-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        <div class="header-bar">
+            <h1>CASE MANAGEMENT SYSTEM</h1>
+            <div style="font-weight: 600; color: var(--primary);">
+                Showing {{ cases|length }} Total Reports
+            </div>
+        </div>
+        <div class="header-bar">
+    <div>
+        <h2 style="margin: 0; font-size: 22px;">Case Records</h2>
+        <p style="margin: 5px 0 0; color: var(--text-sub); font-size: 14px;">Monitor and manage reported incidents</p>
+    </div>
+    
+    <div style="position: relative; width: 350px;">
+        <span style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-sub); font-size: 18px;">🔍</span>
+        <input type="text" id="caseSearch" onkeyup="filterCases()" placeholder="Search by Name or Case ID..." 
+               style="width: 100%; padding: 12px 15px 12px 45px; border-radius: 8px; border: 1px solid var(--border); font-family: inherit; font-size: 14px; outline: none; transition: 0.2s; box-sizing: border-box;">
+    </div>
+</div>
+
+        <table>
+             <thead>
+              <tr>
+                <th style="width: 160px;">Ref ID</th>
+                <th>Complainant</th>
+                <th>Crime Category</th>
+                <th style="width: 150px;">Status Tracker</th> 
+                <th>Date Registered</th>
+                <th style="width: 140px;">Actions</th> 
+              </tr>
+             </thead>
+           <tbody>
+    {% if cases %}
+        {% for c in cases %}
+        <tr>
+            <td class="ref-id" onclick="window.location.href='/view_case/{{ c.reference_id }}'">
+                #{{ c.reference_id }}
+            </td>
+            <td onclick="window.location.href='/view_case/{{ c.reference_id }}'">
+                <div style="font-weight: 600;">{{ c.name }}</div>
+                <div style="font-size: 12px; color: var(--text-sub);">{{ c.email }}</div>
+            </td>
+            <td onclick="window.location.href='/view_case/{{ c.reference_id }}'">
+                <span class="crime-badge">{{ c.crime_type }}</span>
+            </td>
+
+            <td>
+                <form action="/update_status/{{ c.reference_id }}" method="POST" style="margin: 0;">
+                    <select name="status" onchange="this.form.submit()" class="status-select"
+                            style="background: {% if c.status == 'Resolved' %}#e6f4ea{% elif c.status == 'In Progress' %}#fef7e0{% else %}#f1f3f4{% endif %};
+                                   color: {% if c.status == 'Resolved' %}#1e8e3e{% elif c.status == 'In Progress' %}#b45309{% else %}#5f6368{% endif %};">
+                        <option value="Pending" {% if c.status == 'Pending' %}selected{% endif %}>⏳ Pending</option>
+                        <option value="In Progress" {% if c.status == 'In Progress' %}selected{% endif %}>⚡ In Progress</option>
+                        <option value="Resolved" {% if c.status == 'Resolved' %}selected{% endif %}>✅ Resolved</option>
+                    </select>
+                </form>
+            </td>
+
+            <td onclick="window.location.href='/view_case/{{ c.reference_id }}'">{{ c.date }}</td>
+
+            <td>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <a href="{{ url_for('view_case', ref_id=c.reference_id) }}" class="action-link">View &rarr;</a>
+                    
+                    <form action="/delete_case/{{ c.reference_id }}" method="POST" style="margin: 0;" onsubmit="return confirm('Permanently delete this case record?');">
+                        <button type="submit" class="delete-btn">🗑️ Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="6" class="empty-state">No cases found in the database.</td>
+        </tr>
+    {% endif %}
+</tbody>
+        </table>
+    </div>
+
+    <center>
+        <a href="/logout" class="logout-btn">Secure Admin Logout</a>
+    </center>
+
+    <script>
+function filterCases() {
+    // 1. Get the search input value
+    const input = document.getElementById("caseSearch");
+    const filter = input.value.toUpperCase();
+    const table = document.querySelector("table");
+    const tr = table.getElementsByTagName("tr");
+
+    // 2. Loop through all table rows (starting from index 1 to skip header)
+    for (let i = 1; i < tr.length; i++) {
+        // Skip the "empty state" row if it exists
+        if (tr[i].classList.contains('empty-state')) continue;
+
+        // Get Reference ID (1st column) and Name (2nd column)
+        const refIdCell = tr[i].getElementsByTagName("td")[0];
+        const nameCell = tr[i].getElementsByTagName("td")[1];
+
+        if (refIdCell || nameCell) {
+            const refIdText = refIdCell.textContent || refIdCell.innerText;
+            const nameText = nameCell.textContent || nameCell.innerText;
+
+            // 3. Check if the input matches either the ID or the Name
+            if (refIdText.toUpperCase().indexOf(filter) > -1 || 
+                nameText.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = ""; // Show row
+            } else {
+                tr[i].style.display = "none"; // Hide row
+            }
+        }
+    }
+}
+
+// Add a little focus effect for the search bar
+const searchInput = document.getElementById('caseSearch');
+searchInput.addEventListener('focus', () => {
+    searchInput.style.borderColor = 'var(--primary)';
+    searchInput.style.boxShadow = '0 0 0 3px rgba(26, 115, 232, 0.1)';
+});
+searchInput.addEventListener('blur', () => {
+    searchInput.style.borderColor = 'var(--border)';
+    searchInput.style.boxShadow = 'none';
+});
+</script>
+</body>
+</html>
