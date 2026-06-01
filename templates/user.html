@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Cybercrime Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --bg: #f8fafd;
+            --card-bg: #ffffff;
+            --text-main: #202124;
+            --text-sub: #5f6368;
+            --border: #dadce0;
+            --secondary: #f1f3f4; /* For clear button */
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            width: 100%;
+            max-width: 650px;
+            border: 1px solid #eef2f6;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Added for the side-by-side row */
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(26,115,232,0.1);
+        }
+
+        input[readonly] {
+            background-color: #f1f3f4;
+            color: #70757a;
+            border-style: solid;
+            cursor: not-allowed;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: #1557b0;
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            background-color: var(--secondary);
+            color: #3c4043;
+        }
+
+        .btn-clear:hover {
+            background-color: #e8eaed;
+        }
+
+        .history-card {
+            background: #ffffff;
+            border: 1px solid #eef2f6;
+            padding: 20px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            transition: box-shadow 0.2s;
+        }
+
+        .history-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .crime-type {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .case-date {
+            font-size: 13px;
+            color: var(--text-sub);
+        }
+
+        .logout-link {
+            text-align: center;
+            display: block;
+            margin-top: 25px;
+            color: #d93025;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #f1f3f4;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>REGISTER CASE</h1>
+        <form action="/register" method="POST" id="caseForm" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label>Verified Full Name</label>
+                <input type="text" name="name" value="{{ session.user_name }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Registered Email</label>
+                <input type="email" name="email" value="{{ session.user_email }}" readonly>
+            </div>
+
+            <hr>
+
+           <div class="form-group">
+              <label>Residential Address*</label>
+              <input type="text" name="address" id="address" placeholder="Enter full address" 
+                minlength="10" title="Please enter a full address (at least 10 characters)" required>
+           </div>
+
+            <div class="form-group">
+                <label>Mobile Number*</label>
+                <input type="tel" name="mobile" id="mobile" placeholder="10-digit mobile" pattern="[6789][0-9]{9}" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date of Incident</label>
+                    <input type="date" name="incident_date" id="incident_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Financial Loss (₹)</label>
+                    <input type="number" name="financial_loss" id="financial_loss" placeholder="0" min="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Category of Incident</label>
+                <select name="crime_type" id="crime_type" required>
+                    <option value="" disabled selected>Choose a category</option>
+                    <option>Online Fraud</option>
+                    <option>Phishing</option>
+                    <option>Ransomware</option>
+                    <option>Identity Theft</option>
+                    <option>Hacking</option>
+                    <option>Cyberstalking</option>
+                    <option>Data Breach</option>
+                    <option>Child Exploitation</option>
+                    <option>Social Media Crime</option>
+                    <option>Financial Fraud</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Incident Details</label>
+                <textarea name="description" id="description" placeholder="Explain what happened..." rows="4" minlength="10" required></textarea>
+            </div>
+
+            <form action="/register" method="POST" id="caseForm" enctype="multipart/form-data">
+
+<div class="form-group">
+    <label>Evidence / Supporting Information</label>
+    
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 11px; color: var(--primary);">Upload Supporting Evidences (Up to 20)</label>
+        <input type="file" id="filePicker" accept="image/*,video/*,audio/*,.pdf,.doc,.docx" style="padding: 10px;" multiple>
+        
+        <div id="fileQueueDisplay" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+        
+        <input type="file" name="evidence_image" id="evidence_image" multiple style="display: none;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 11px; color: var(--primary);">Relevant Links (URL)</label>
+        <input type="url" name="evidence_url" id="evidence_url" placeholder="https://example.com/evidence-link">
+    </div>
+
+    <label style="font-size: 11px; color: var(--primary);">Evidence Description</label>
+    <textarea name="evidence_desc" id="evidence" placeholder="Transaction IDs, account numbers, etc." rows="3"></textarea>
+</div>
+            <div class="btn-row">
+                <button type="button" class="btn-clear" onclick="clearSpecificFields()">Clear Page</button>
+                <button type="submit" class="btn-submit">Submit Official Report</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>Your Filing History</h2>
+        {% if cases %}
+            {% for c in cases %}
+            <div class="history-card">
+                <div class="case-header">
+                    <span class="crime-type">{{ c.crime_type }}</span>
+                    <span class="case-date">{{ c.date }}</span>
+                </div>
+                <p style="margin: 0; color: #444; font-size: 14px; line-height: 1.5;">{{ c.description }}</p>
+                <div style="margin-top: 10px; font-size: 12px; color: #999;">Reference: #{{ c.reference_id }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: #999; font-style: italic;">No cases registered under this email yet.</p>
+        {% endif %}
+        
+        <a href="/logout" class="logout-link">Exit Secure Portal</a>
+    </div>
+
+<script>
+    // --- FILE QUEUE LOGIC ---
+    let finalFileQueue = []; // This array keeps all your files safe
+
+    const filePicker = document.getElementById('filePicker');
+    const display = document.getElementById('fileQueueDisplay');
+    const actualInput = document.getElementById('evidence_image');
+
+    // Handle selecting new files
+if (filePicker) {
+    filePicker.addEventListener('change', function() {
+        const selected = Array.from(filePicker.files);
+        let limitExceeded = false;
+        
+        selected.forEach(file => {
+            // Check if adding this file stays within the 20-file limit
+            if (finalFileQueue.length < 20) {
+                // Prevent duplicates
+                if (!finalFileQueue.some(f => f.name === file.name)) {
+                    finalFileQueue.push(file);
+                }
+            } else {
+                // If the limit of 20 is already reached
+                limitExceeded = true;
+            }
+        });
+        
+        // Show alert if the user tried to add more than 20 files
+        if (limitExceeded) {
+            alert("You can only upload a maximum of 20 supporting documents.");
+        }
+        
+        renderQueue();
+        filePicker.value = ""; // Reset picker so you can pick more files again
+    });
+}
+
+    function renderQueue() {
+        display.innerHTML = "";
+        finalFileQueue.forEach((file, index) => {
+            const tag = document.createElement('div');
+            // Matches your existing Blue/Inter UI theme
+            tag.style = "background:#e8f0fe; color:#1a73e8; padding:5px 12px; border-radius:20px; font-size:12px; display:flex; align-items:center; gap:8px; border:1px solid #1a73e8; margin-bottom:5px;";
+            tag.innerHTML = `
+                <span>${file.name}</span>
+                <span style="cursor:pointer; color:#d93025; font-weight:bold; font-size:16px;" onclick="removeSpecificFile(${index})">×</span>
+            `;
+            display.appendChild(tag);
+        });
+    }
+
+    function removeSpecificFile(index) {
+        finalFileQueue.splice(index, 1); // Delete only the specific file clicked
+        renderQueue();
+    }
+
+    // --- DATE RESTRICTION LOGIC ---
+    window.onload = function() {
+        const dateInput = document.getElementById('incident_date');
+        const today = new Date();
+        const fifteenDaysAgo = new Date();
+        fifteenDaysAgo.setDate(today.getDate() - 15);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+            return [year, month, day].join('-');
+        };
+
+        if (dateInput) {
+            dateInput.max = formatDate(today);          
+            dateInput.min = formatDate(fifteenDaysAgo); 
+        }
+    };
+
+    // --- FORM SUBMISSION & VALIDATION ---
+    document.getElementById('caseForm').onsubmit = function(e) {
+        const address = document.getElementById('address').value;
+        const mobile = document.getElementById('mobile').value;
+        const description = document.getElementById('description').value;
+
+        // 1. Move files from our Queue to the actual hidden form input
+        const dataTransfer = new DataTransfer();
+        finalFileQueue.forEach(file => dataTransfer.items.add(file));
+        actualInput.files = dataTransfer.files;
+
+        // 2. Multi-File Validation
+        if (finalFileQueue.length === 0) {
+            alert("Please upload at least one evidence file.");
+            e.preventDefault();
+            return false;
+        }
+        if (finalFileQueue.length > 20) {
+           alert("You can only upload a maximum of 20 supporting documents.");
+           e.preventDefault();
+           return false;
+        }
+
+        // 3. Address Validation
+        if (address.trim().length < 10) {
+            alert("Please provide a more detailed address (minimum 10 characters).");
+            e.preventDefault();
+            return false;
+        }
+
+        // 4. Mobile Validation (Starting with 6,7,8,9)
+        const mobilePattern = /^[6789][0-9]{9}$/;
+        if (!mobilePattern.test(mobile)) {
+            alert("Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.");
+            e.preventDefault();
+            return false;
+        }
+
+        // 5. Description Validation
+        if (description.trim().length < 10) {
+            alert("Please explain the incident in more detail (minimum 10 characters).");
+            e.preventDefault();
+            return false;
+        }
+    };
+
+    function clearSpecificFields() {
+        document.getElementById('caseForm').reset();
+        finalFileQueue = []; // Clear the file queue array
+        renderQueue(); // Update the UI
+    }
+</script>
+</body>
+</html>

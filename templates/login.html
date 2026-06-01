@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login | Cybercrime Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --accent: #64b5f6;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Professional Gradient Background */
+            background: radial-gradient(circle at top left, #1a73e8, #0d47a1);
+            overflow: hidden;
+        }
+
+        /* Abstract decorative circles for background depth */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d2939;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: #667085;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .role-switch {
+            display: flex;
+            background: #f2f4f7;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .role-switch label {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #667085;
+            transition: 0.3s;
+            border-radius: 8px;
+        }
+
+        .role-switch input { display: none; }
+
+        /* Highlight effect when radio is checked */
+        .role-switch input:checked + span {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: block;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #344054;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #d0d5dd;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: 0.2s;
+            background: white;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(26,115,232,0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #1557b0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26,115,232,0.3);
+        }
+
+        .hidden { display: none; }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #98a2b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="circle" style="width: 300px; height: 300px; top: -100px; left: -100px;"></div>
+    <div class="circle" style="width: 200px; height: 200px; bottom: -50px; right: -50px;"></div>
+
+    <div class="login-container">
+        <div class="header">
+            <h1>PORTAL ACCESS</h1>
+            <p>Cybercrime Management System</p>
+        </div>
+
+        <form action="/login" method="POST">
+    <div class="role-switch">
+        <label>
+            <input type="radio" name="role" value="user" checked onclick="toggleUI()">
+            <span>USER</span>
+        </label>
+        <label>
+            <input type="radio" name="role" value="admin" onclick="toggleUI()">
+            <span>ADMIN</span>
+        </label>
+    </div>
+
+ <div class="input-group">
+    <label id="nameLabel">Full Name</label>
+    <input type="text" name="username" id="username" placeholder="Enter your name" required>
+</div>
+
+<div class="input-group" id="emailGroup">
+    <label>Email Address</label>
+    <input type="email" name="email" id="email" placeholder="name@example.com" required>
+</div>
+
+    <div class="input-group hidden" id="passGroup">
+        <label>Password</label>
+        <input type="password" name="password" id="password" placeholder="••••••••">
+    </div>
+
+    <div id="actionGroup">
+    <label>Select Action:</label><br>
+    <input type="radio" name="user_action" value="register"> Case Registration<br>
+    <input type="radio" name="user_action" value="tracker"> Case Tracker<br>
+</div>
+
+    <button type="submit" class="login-btn">Sign In</button>
+</form>
+
+        <div class="footer-text">
+            Protected by 256-bit encryption &copy; 2026
+        </div>
+    </div>
+
+    <script>
+    function toggleUI() {
+    const role = document.querySelector('input[name="role"]:checked').value;
+    const emailGrp = document.getElementById('emailGroup');
+    const passGrp = document.getElementById('passGroup');
+    const nameLbl = document.getElementById('nameLabel');
+    const userInp = document.getElementById('username');
+    const actionGrp = document.getElementById('actionGroup'); // ✅ NEW
+
+    passGrp.classList.remove('hidden');
+    document.getElementById('password').required = true;
+
+    if (role === 'admin') {
+        emailGrp.classList.add('hidden');
+        actionGrp.classList.add('hidden'); // ✅ HIDE OPTIONS
+        document.getElementById('email').required = false;
+
+        nameLbl.innerText = "Admin ID";
+        userInp.placeholder = "Enter your Admin ID";
+    } else {
+        emailGrp.classList.remove('hidden');
+        actionGrp.classList.remove('hidden'); // ✅ SHOW OPTIONS
+        document.getElementById('email').required = true;
+
+        nameLbl.innerText = "Full Name";
+        userInp.placeholder = "Enter your full name";
+    }
+}
+document.querySelector('form').onsubmit = function(e) {
+    const role = document.querySelector('input[name="role"]:checked').value;
+    const name = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value;
+
+    // ✅ ADD THIS BLOCK (MAIN FIX)
+    if (role === 'user') {
+        const selectedAction = document.querySelector('input[name="user_action"]:checked');
+
+        if (!selectedAction) {
+            alert("Please select Case Registration or Case Tracker ❌");
+            e.preventDefault();
+            return false;
+        }
+
+        console.log("Selected Action:", selectedAction.value); // debug
+    }
+
+    // --- EXISTING VALIDATION ---
+    if (role === 'user') {
+        
+        const nameParts = name.split(/\s+/).filter(part => part.length > 0);
+        const isValidName = nameParts.length >= 2 && nameParts.every(part => part.length >= 2);
+        const lettersOnly = /^[A-Za-z\s]+$/.test(name);
+
+        if (!lettersOnly) {
+            alert("User Name should only contain letters and spaces.");
+            e.preventDefault();
+            return false;
+        }
+
+        if (!isValidName) {
+            alert("Users must enter a full name (e.g., 'John Doe'). Each part must be 2+ letters.");
+            e.preventDefault();
+            return false;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            e.preventDefault();
+            return false;
+        }
+    }
+};
+</script>
+</body>
+</html>
